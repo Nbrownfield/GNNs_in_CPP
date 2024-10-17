@@ -34,13 +34,6 @@ GCNLayer::GCNLayer(int input_dim, int output_dim, Eigen::MatrixXd adjMatrix)
     srand(40);
     GCNLayer::W = Eigen::MatrixXd::Random(input_dim, output_dim);
 
-    for(int i=0;i<input_dim;i++)
-    {
-        for(int j=0;j<output_dim;j++)
-        {
-            GCNLayer::W(i,j) = std::fabs(GCNLayer::W(i,j));
-        }
-    }
     std::cout << "Weight Matrix (W):\n";
     std::cout << GCNLayer::W << "\n\n";
 }
