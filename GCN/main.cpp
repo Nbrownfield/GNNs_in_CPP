@@ -23,13 +23,31 @@ Eigen::MatrixXf load_csv(const std::string & path) {
     return Eigen::Map<Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(values.data(), rows, values.size()/rows);
 }
 
+double cross_entropy(Eigen::MatrixXf y_true, Eigen::MatrixXf y_pred)
+{
+    double loss = 0.0;
+    for (int i = 0; i < y_true.rows(); i++)
+    {
+        for (int j = 0; j < y_true.cols(); j++)
+        {
+            loss += y_true(i, j) * log(y_pred(i, j));
+        }
+    }
+    return -loss;
+}
+
 int main()
 {
     Eigen::MatrixXf W1 = load_csv("Weights_conv1.csv");
-    std::cout << W1 << "\n\n";
-
     Eigen::MatrixXf W2 = load_csv("Weights_conv2.csv");
-    std::cout << W2 << "\n\n";
+    Eigen::MatrixXf adjMat = load_csv("adjMat.csv");
+    Eigen::MatrixXf X = load_csv("xMat.csv");
+
+    model myModel = model(adjMat);
+    myModel.updateWeights(W1,W2);
+    Eigen::MatrixXf out = myModel.forward(X);
+
+    std::cout << "out:\n" << out << std::endl;
 
     return 0;
 }

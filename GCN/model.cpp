@@ -12,7 +12,7 @@ Eigen::MatrixXf model::forward(Eigen::MatrixXf X)
 {
     Eigen::MatrixXf h = model::conv1.forward(X);
     h = h.array().tanh().matrix();
-    Eigen::MatrixXf out = model::conv2.forward(X);
+    Eigen::MatrixXf out = model::conv2.forward(h);
 
     return out;
 }
