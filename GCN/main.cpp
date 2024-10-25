@@ -4,7 +4,7 @@
 #include <cmath>
 #include <eigen3/Eigen/Dense>
 
-//#include "model.h"
+#include "model.h"
 
 Eigen::MatrixXf load_csv(const std::string & path) {
     std::ifstream indata;
