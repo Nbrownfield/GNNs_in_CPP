@@ -38,10 +38,10 @@ double cross_entropy(Eigen::MatrixXf y_true, Eigen::MatrixXf y_pred)
 
 int main()
 {
-    Eigen::MatrixXf W1 = load_csv("Weights_conv1.csv");
-    Eigen::MatrixXf W2 = load_csv("Weights_conv2.csv");
-    Eigen::MatrixXf adjMat = load_csv("adjMat.csv");
-    Eigen::MatrixXf X = load_csv("xMat.csv");
+    Eigen::MatrixXf W1 = load_csv("mydata/Weights_conv1.csv");
+    Eigen::MatrixXf W2 = load_csv("mydata/Weights_conv2.csv");
+    Eigen::MatrixXf adjMat = load_csv("mydata/adjMat.csv");
+    Eigen::MatrixXf X = load_csv("mydata/xMat.csv");
 
     model myModel = model(adjMat);
     myModel.updateWeights(W1,W2);
