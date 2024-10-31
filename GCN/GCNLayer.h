@@ -9,13 +9,10 @@
 class GCNLayer
 {
     public:
-        GCNLayer(int input_dim, int output_dim, Eigen::MatrixXf adjMatrix);
-        Eigen::MatrixXf forward(Eigen::MatrixXf X);
+        GCNLayer(int input_dim, int output_dim);
+        Eigen::MatrixXf forward(Eigen::MatrixXf X, Eigen::MatrixXf adjMatrix);
         void updateWeights(Eigen::MatrixXf new_W);
     private:
-        Eigen::MatrixXf A;
-        Eigen::MatrixXf A_hat;
-        Eigen::MatrixXf D;
         Eigen::MatrixXf W; 
 };
 

@@ -14,7 +14,6 @@ data = dataset[0]
 # Graph Convolutional Network
 class GCN(torch.nn.Module):
 
-    #stacks 3 convolution layers, aggregating 3-hop neighborehood info around each node (each node gets info from all nodes up to 3 hops away)
     def __init__(self):
         super(GCN, self).__init__()
         torch.manual_seed(12345)
@@ -41,6 +40,9 @@ def train(data):
     optimizer.step()  # Update parameters based on gradients.
     return loss, h
 
+def accuracy(pred_y, y):
+    return (pred_y == y).sum() / len(y)
+
 for epoch in range(400):
     loss, h = train(data)
     print(f'Epoch: {epoch}, Loss: {loss}')
@@ -48,11 +50,9 @@ for epoch in range(400):
 #write weights out to .csv files
 paramIndex = 0
 for name, param in model.named_parameters():
-    print(name, torch.transpose(param, 0, 1))
-
     paramIndex = paramIndex + 1
 
-    filename = "Weights_conv" + str(paramIndex) + ".csv"
+    filename = "mydata/Weights_conv" + str(paramIndex) + ".csv"
     t_np = torch.transpose(param, 0, 1).detach().numpy()
     df = pd.DataFrame(t_np)
     df.to_csv(filename,index=False, header=False)
@@ -61,15 +61,20 @@ for name, param in model.named_parameters():
 adjMat = to_dense_adj(data.edge_index).reshape([dataset.num_features,dataset.num_features]) #convert from 3d ([1,34,34]) tensore to 2d ([34,34])
 adjMatNp = adjMat.numpy()
 adjDf = pd.DataFrame(adjMatNp)
-adjDf.to_csv("adjMat.csv",index=False, header=False)
+adjDf.to_csv("mydata/adjMat.csv",index=False, header=False)
 
 #write x node feature matrix
 xNp = data.x.numpy()
 
 xDf = pd.DataFrame(xNp)
-xDf.to_csv("xMat.csv",index=False, header=False)
+xDf.to_csv("mydata/xMat.csv",index=False, header=False)
+
+#write y output
+yNp = data.y.numpy()
+
+yDf = pd.DataFrame(yNp)
+yDf.to_csv("mydata/yMat.csv",index=False, header=False)
 
 out, h = model(data.x, data.edge_index)
-print(out[data.train_mask])
-print(data.train_mask)
-print(data.y[data.train_mask])
+acc = accuracy(out.argmax(dim=1), data.y)
+print(f'Accuracy: {acc}')

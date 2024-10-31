@@ -10,8 +10,8 @@
 class model
 {
     public:
-        model(Eigen::MatrixXf adjMatrix);
-        Eigen::MatrixXf forward(Eigen::MatrixXf X);
+        model();
+        Eigen::MatrixXf forward(Eigen::MatrixXf X, Eigen::MatrixXf adjMatrix);
         void updateWeights(Eigen::MatrixXf W1, Eigen::MatrixXf W2);
     private:
         GCNLayer conv1;

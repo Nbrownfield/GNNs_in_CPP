@@ -1,18 +1,18 @@
 #include "model.h"
 #include "GCNLayer.h"
 
-model::model(Eigen::MatrixXf adjMatrix)
-    : conv1(adjMatrix.rows(), 4, adjMatrix)
-    , conv2(4, 4, adjMatrix)
+model::model()
+    : conv1(34, 4)
+    , conv2(4, 4)
 {
 
 }
 
-Eigen::MatrixXf model::forward(Eigen::MatrixXf X)
+Eigen::MatrixXf model::forward(Eigen::MatrixXf X, Eigen::MatrixXf adjMatrix)
 {
-    Eigen::MatrixXf h = model::conv1.forward(X);
+    Eigen::MatrixXf h = model::conv1.forward(X, adjMatrix);
     h = h.array().tanh().matrix();
-    Eigen::MatrixXf out = model::conv2.forward(h);
+    Eigen::MatrixXf out = model::conv2.forward(h, adjMatrix);
 
     return out;
 }
