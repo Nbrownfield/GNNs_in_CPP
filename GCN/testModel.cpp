@@ -31,15 +31,15 @@ Eigen::RowVectorXi argmax(Eigen::MatrixXf mat)
 {
     Eigen::RowVectorXi out(34);
     int vecIndex = 0;
-    for (auto row : mat.rowwise())
+    for (int j=0; j < mat.rows(); j++)
     {
         float rowMax = 0;
         int rowMaxIndex = 0;
-        for (int i=0; i < row.size(); i++)
+        for (int i=0; i < mat.cols(); i++)
         {
-            if (row(i) > rowMax)
+            if (mat(j,i) > rowMax)
             {
-                rowMax = row(i);
+                rowMax = mat(j,i);
                 rowMaxIndex = i;
             }
         }

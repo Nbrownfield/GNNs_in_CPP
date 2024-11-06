@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include <eigen3/Eigen/Dense>
+#include <chrono>
 
 #include "model.h"
 #include "testModel.h"
@@ -26,6 +27,7 @@ Eigen::MatrixXf load_csv(const std::string & path) {
 
 int main()
 {
+    //read data
     Eigen::MatrixXf W1 = load_csv("mydata/Weights_conv1.csv");
     Eigen::MatrixXf W2 = load_csv("mydata/Weights_conv2.csv");
     Eigen::MatrixXf adjMat = load_csv("mydata/adjMat.csv");
@@ -33,14 +35,21 @@ int main()
     Eigen::MatrixXf yMat = load_csv("mydata/yMat.csv").transpose();
 
     Eigen::RowVectorXi Y = yMat.row(0).cast<int>();
-
     std::cout << "y: \n" << Y << std::endl;
 
+    //initialize model, update weights
     model myModel = model();
     myModel.updateWeights(W1,W2);
+
+    //Perform one pass of model, record time taken
+    auto start = std::chrono::high_resolution_clock::now();
+
     Eigen::MatrixXf out = myModel.forward(X, adjMat);
 
-    std::cout << "out:\n" << out << std::endl;
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+
+    std::cout << "Time taken for one pass through model: " << duration.count() << " microseconds" << std::endl;
 
     Eigen::RowVectorXi pred = argmax(out);
 

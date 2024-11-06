@@ -3,6 +3,7 @@ import torch
 from torch.nn import Linear
 from torch_geometric.nn import GCNConv
 import pandas as pd
+import time
 
 from torch_geometric.datasets import KarateClub
 from torch_geometric.utils import to_dense_adj
@@ -75,6 +76,15 @@ yNp = data.y.numpy()
 yDf = pd.DataFrame(yNp)
 yDf.to_csv("mydata/yMat.csv",index=False, header=False)
 
+start_time = time.perf_counter_ns()
+
 out, h = model(data.x, data.edge_index)
+
+end_time = time.perf_counter_ns()
+elapsed_time_ns = end_time - start_time
+elapsed_time_us = elapsed_time_ns / 1000
+
+print(f'Time taken for one pass of model: {elapsed_time_us} microseconds')
+
 acc = accuracy(out.argmax(dim=1), data.y)
 print(f'Accuracy: {acc}')
